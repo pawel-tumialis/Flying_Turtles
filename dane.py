@@ -24,7 +24,7 @@ def t_and_r(iter: int):
     no_r = routes["lon"].count()
     
     row = [trajectories.iloc[no_t-1][0], trajectories.iloc[no_t-1][1], trajectories.iloc[no_t-1][2]]
-    print(row)
+    #print(row)
     row_ = row.copy()            
     if(no_t < 2000):        #duplikowanie trajektorii
         for i in range(no_t, 2000):
@@ -39,7 +39,7 @@ def t_and_r(iter: int):
     row = [routes.iloc[no_r-1][0], routes.iloc[no_r-1][1]]
     #print(row)
     row_ = row.copy()  
-    if(no_r < 5):        #duplikowanie routsow
+    if(no_r < 35):        #duplikowanie routsow
         for i in range(no_r, 35):
             routes.loc[i] = row_      
     else:
