@@ -5,7 +5,7 @@ from scipy import sparse
 import pandas as pd
 
 weather_name = ''
-path_to_train ='D:/Projects\Heckathon/trajectory_challenge/train_flights.csv'
+path_to_train ='../data/trajectory_challenge/train_flights.csv'
 fmap = folium.Map(location=[35, -100], zoom_start=6)
 
 BOUNDARIES = [(21.9430, -67.5), (55.7765, -135)]
@@ -53,7 +53,12 @@ def load_and_show_vil(pogoda: str, trajektoria: str) -> folium.Map:
     route = df.to_numpy()
     for i in range(len(route)):
         folium.Marker(location=[route[i,0],route[i,1]]).add_to(fmap)
-        
+
+    folium.PolyLine(route,
+                color='green',
+                weight=1,
+                opacity=0.5,
+                bounds=BOUNDARIES).add_to(fmap)
     
     return plot
 
@@ -73,4 +78,4 @@ def read_weather_name(timestamp):
     file_name ='trajectory_challenge/VIL_merc/VIL-' + timestamp + "-" + "{:02d}".format(hour) + '_' + "{:02d}".format(minute) + 'Z.npz'
     return file_name
 
-load_and_show_vil(f"D:/Projects/Heckathon/trajectory_challenge/VIL_merc/VIL-2022-07-01-00_00Z.npz", f"D:/Projects/Heckathon/trajectory_challenge/routes/flp_2A7i5CZ7tLiLnKGKgUeNFY.csv")
+load_and_show_vil(f"../data/trajectory_challenge/VIL_merc/VIL-2022-07-01-00_00Z.npz", f"../data/trajectory_challenge/routes/flp_2A7i5CZ7tLiLnKGKgUeNFY.csv")
