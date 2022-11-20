@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import scipy.sparse
 
-def t_and_r(iter: int): #wyrzuca trajektorje i route dla i-tego indeksu z train_flights
+def t_and_r(iter: int):
     def router_usefull_data(file_):
         df = pd.read_csv(file_, sep=',')
         del df["code"]
@@ -16,12 +16,42 @@ def t_and_r(iter: int): #wyrzuca trajektorje i route dla i-tego indeksu z train_
     file_t = "../data/trajectory_challenge/train_trajectories/"+ train["id"][iter]  +".csv"
     file_r = "../data/trajectory_challenge/routes/"+ train["id"][iter]  +".csv"
 
+    #2k x i 2k y routes 30
     trajectories = pd.read_csv(file_t, sep=',')
     routes = router_usefull_data(file_r)
 
+    no_t = trajectories["lon"].count()
+    no_r = routes["lon"].count()
+    
+    row = [trajectories.iloc[no_t-1][0], trajectories.iloc[no_t-1][1], trajectories.iloc[no_t-1][2]]
+    print(row)
+    row_ = row.copy()            
+    if(no_t < 2000):        #duplikowanie trajektorii
+        for i in range(no_t, 2000):
+            trajectories.loc[i] = row_     
+    else:
+        s = np.arange(no_t-2000)
+        ind = (1/(no_t-2000+1)*no_t)*s
+        ind = ind.astype(int)
+        trajectories = trajectories.drop(trajectories.index[ind])
+        trajectories = trajectories.reset_index(drop=True)
+    
+    row = [routes.iloc[no_r-1][0], routes.iloc[no_r-1][1]]
+    #print(row)
+    row_ = row.copy()  
+    if(no_r < 5):        #duplikowanie routsow
+        for i in range(no_r, 35):
+            routes.loc[i] = row_      
+    else:
+        s = np.arange(no_r-35)
+        ind = (1/(no_r-35+1)*no_r)*s
+        ind = ind.astype(int)
+        routes = routes.drop(routes.index[ind])
+        routes = routes.reset_index(drop=True)
+    
     return trajectories, routes
 
-def read_weather(trajektorja, iter_in_tr):#wyrzuca pogode dla i-tego momentu w naszym ruchu
+def read_weather(trajektorja, iter_in_tr):
     text = trajektorja.track_timestamp[iter_in_tr]
     #timestamp = '2022-07-06 00:37:25+00:00'
     #print(timestamp)
